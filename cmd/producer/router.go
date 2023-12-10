@@ -1,4 +1,4 @@
-package producer
+package main
 
 import (
 	"gofka/internal/infrastructure/controllers"

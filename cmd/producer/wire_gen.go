@@ -4,7 +4,7 @@
 //go:build !wireinject
 // +build !wireinject
 
-package producer
+package main
 
 import (
 	"gofka/internal/application"
