@@ -9,6 +9,7 @@ package main
 import (
 	"gofka/internal/application"
 	"gofka/internal/infrastructure/controllers"
+	"gofka/internal/infrastructure/repositories"
 	"gofka/internal/infrastructure/servers"
 )
 
@@ -17,7 +18,9 @@ import (
 func initialize() *servers.FiberServer {
 	healthService := application.NewHealthService()
 	healthController := controllers.NewHealthController(healthService)
-	router := NewRouter(healthController)
+	kafkaRepository := repositories.NewKafkaRepository()
+	producerController := controllers.NewProducerController(kafkaRepository)
+	router := NewRouter(healthController, producerController)
 	fiberServer := servers.NewFiberServer(router)
 	return fiberServer
 }
