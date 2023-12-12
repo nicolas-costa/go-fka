@@ -1,7 +1,11 @@
 package application
 
 type Messenger interface {
-	Post(message string) bool
+	Send(message string) bool
+}
+
+type Pinger interface {
+	Ping()
 }
 
 type MessagingService struct {
@@ -12,6 +16,6 @@ func NewMessagingService(messageRepository Messenger) *MessagingService {
 	return &MessagingService{repository: messageRepository}
 }
 
-func (p *MessagingService) Post(message string) {
-	p.repository.Post(message)
+func (p *MessagingService) Ping() {
+	p.repository.Send("Ping")
 }
