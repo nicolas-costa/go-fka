@@ -21,5 +21,7 @@ func NewRouter(healthController *controllers.HealthController,
 func (r *Router) SetRoutes(app *servers.FiberServer) {
 	app.Get("/health", r.healthController.Check)
 
-	app.Get("ping", r.producerController.Ping)
+	messaging := app.Group("messaging")
+
+	messaging.Get("/ping", r.producerController.Ping)
 }
