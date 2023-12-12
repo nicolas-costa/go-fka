@@ -24,11 +24,20 @@ func NewKafkaRepository() *KafkaRepository {
 	}
 }
 
-func (k *KafkaRepository) Post(message string) bool {
-	write, err := k.connection.Write([]byte(message))
+func (k *KafkaRepository) Send(message string) bool {
+	bytesWritten, err := k.connection.Write([]byte(message))
 	if err != nil {
 		panic(err)
 	}
 
-	return write > 0
+	return bytesWritten > 0
+}
+
+func (k *KafkaRepository) Ping() bool {
+	brokers, err := k.connection.Brokers()
+	if err != nil {
+		panic(err)
+	}
+
+	return len(brokers) > 0
 }

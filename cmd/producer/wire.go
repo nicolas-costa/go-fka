@@ -19,8 +19,11 @@ func initialize() *servers.FiberServer {
 		repositories.NewKafkaRepository,
 		NewRouter,
 		application.NewHealthService,
+		application.NewMessagingService,
 		wire.Bind(new(servers.Router), new(*Router)),
 		wire.Bind(new(application.Checker), new(*application.HealthService)),
+		wire.Bind(new(application.Healther), new(*repositories.KafkaRepository)),
+		wire.Bind(new(application.Pinger), new(*application.MessagingService)),
 		wire.Bind(new(application.Messenger), new(*repositories.KafkaRepository)),
 	)
 

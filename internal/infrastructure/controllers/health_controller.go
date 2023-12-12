@@ -17,6 +17,6 @@ func NewHealthController(service application.Checker) *HealthController {
 
 func (h *HealthController) Check(c *fiber.Ctx) error {
 	return c.JSON(map[string]interface{}{
-		"healthy": h.healthService.Check(),
+		"kafka": h.healthService.Check(),
 	})
 }

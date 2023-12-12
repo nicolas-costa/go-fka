@@ -7,17 +7,17 @@ import (
 )
 
 type ProducerController struct {
-	messagingService application.Messenger
+	pingerService application.Pinger
 }
 
-func NewProducerController(service application.Messenger) *ProducerController {
+func NewProducerController(service application.Pinger) *ProducerController {
 	return &ProducerController{
-		messagingService: service,
+		pingerService: service,
 	}
 }
 
 func (p *ProducerController) Ping(c *fiber.Ctx) error {
-	p.messagingService.Post("Ping")
+	p.pingerService.Ping()
 
 	return c.SendStatus(http.StatusNoContent)
 }

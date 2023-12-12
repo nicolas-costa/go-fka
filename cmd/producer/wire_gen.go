@@ -16,10 +16,11 @@ import (
 // Injectors from wire.go:
 
 func initialize() *servers.FiberServer {
-	healthService := application.NewHealthService()
-	healthController := controllers.NewHealthController(healthService)
 	kafkaRepository := repositories.NewKafkaRepository()
-	producerController := controllers.NewProducerController(kafkaRepository)
+	healthService := application.NewHealthService(kafkaRepository)
+	healthController := controllers.NewHealthController(healthService)
+	messagingService := application.NewMessagingService(kafkaRepository)
+	producerController := controllers.NewProducerController(messagingService)
 	router := NewRouter(healthController, producerController)
 	fiberServer := servers.NewFiberServer(router)
 	return fiberServer
