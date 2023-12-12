@@ -1,17 +1,23 @@
 package application
 
+type Healther interface {
+	Ping() bool
+}
+
 type Checker interface {
 	Check() bool
 }
 
 type HealthService struct {
+	healther Healther
 }
 
-func NewHealthService() *HealthService {
-	return &HealthService{}
+func NewHealthService(healther Healther) *HealthService {
+	return &HealthService{
+		healther: healther,
+	}
 }
 
 func (h *HealthService) Check() bool {
-	// @todo: add external services check
-	return true
+	return h.healther.Ping()
 }
