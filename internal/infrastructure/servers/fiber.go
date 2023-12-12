@@ -22,8 +22,12 @@ func NewFiberServer(router Router) *FiberServer {
 	return server
 }
 
-func (f *FiberServer) Get(path string, handler ...fiber.Handler) {
-	f.server.Get(path, handler...)
+func (f *FiberServer) Get(path string, handlers ...fiber.Handler) {
+	f.server.Get(path, handlers...)
+}
+
+func (f *FiberServer) Group(prefix string) fiber.Router {
+	return f.server.Group(prefix)
 }
 
 func (f *FiberServer) Start() error {
