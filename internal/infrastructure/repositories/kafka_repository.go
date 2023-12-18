@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	tennisCourtTopic = "tennis_court"
+	tennisCourtTopic = "tennis-court"
 )
 
 type KafkaRepository struct {
