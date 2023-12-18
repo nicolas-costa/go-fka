@@ -16,9 +16,9 @@ services:
       dockerfile: Dockerfile
       context: ./
       target: dev
-    command: CompileDaemon -directory="./" -build="go build -o ./bin/consumer ./cmd/consumer/main.go" -command="./bin/consumer" -polling=true -polling-interval=600
+    command: CompileDaemon -directory="./" -build="go build -o ./bin/consumer ./cmd/consumer/main.go ./cmd/consumer/wire_gen.go ./cmd/consumer/router.go" -command="./bin/consumer" -polling=true -polling-interval=600
     ports:
-      - "3001:3001"
+      - "3001:3000"
     volumes:
       - "./:/app"
   kafka:
