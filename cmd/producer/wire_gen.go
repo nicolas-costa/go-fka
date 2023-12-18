@@ -19,8 +19,8 @@ func initialize() *servers.FiberServer {
 	kafkaRepository := repositories.NewKafkaRepository()
 	healthService := application.NewHealthService(kafkaRepository)
 	healthController := controllers.NewHealthController(healthService)
-	messagingService := application.NewMessagingService(kafkaRepository)
-	producerController := controllers.NewProducerController(messagingService)
+	pingService := application.NewPingService(kafkaRepository)
+	producerController := controllers.NewProducerController(pingService)
 	router := NewRouter(healthController, producerController)
 	fiberServer := servers.NewFiberServer(router)
 	return fiberServer
