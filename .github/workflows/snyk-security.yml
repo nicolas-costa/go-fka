@@ -40,7 +40,7 @@ jobs:
 
       - name: Set up Snyk CLI to perform SCA
         # Default command is snyk test, which is SCA scan
-        uses: snyk/actions/golang@master
+      - uses: snyk/actions/golang@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
