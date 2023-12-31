@@ -1,16 +1,19 @@
 name: Snyk Security
 
 on:
-  merge:
-    branches: ["master" ]
-  pull_request:
-    branches: ["master"]
+  pull_request_target:
+    types:
+      - closed
+  branches:
+    - master
 
 permissions:
   contents: read
 
 jobs:
-  snyk:
+  if_merged:
+    if: github.event.pull_request.merged == true
+    snyk:
     permissions:
       contents: read # for actions/checkout to fetch code
       security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
