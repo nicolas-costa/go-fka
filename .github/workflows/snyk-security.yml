@@ -13,40 +13,39 @@ permissions:
 jobs:
   if_merged:
     if: github.event.pull_request.merged == true
-    snyk:
-      permissions:
-        contents: read # for actions/checkout to fetch code
-        security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
-        actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v3
+    permissions:
+      contents: read # for actions/checkout to fetch code
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-        - name: Set up Snyk CLI to perform SCA
-          uses: snyk/actions/golang@master
-          continue-on-error: true
-          env:
-            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          with:
-            # command: test => defaults to test, which is SCA scan
-            args: --severity-threshold=high --sarif-file-output=snyk.sarif
+      - name: Set up Snyk CLI to perform SCA
+        uses: snyk/actions/golang@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          # command: test => defaults to test, which is SCA scan
+          args: --severity-threshold=high --sarif-file-output=snyk.sarif
 
-        - name: Perform Snyk SAST
-          uses: snyk/actions/golang@master
-          continue-on-error: true
-          env:
-            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          with:
-            command: code test
-            args: --sarif-file-output=snyk-code.sarif
+      - name: Perform Snyk SAST
+        uses: snyk/actions/golang@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: code test
+          args: --sarif-file-output=snyk-code.sarif
 
-        - name: Create SARIF directory and move SARIF files
-          run: |
-            mkdir sarif_files && mv snyk.sarif snyk-code.sarif sarif_files/
+      - name: Create SARIF directory and move SARIF files
+        run: |
+          mkdir sarif_files && mv snyk.sarif snyk-code.sarif sarif_files/
 
-        - name: Upload result to GitHub Code Scanning
-          uses: github/codeql-action/upload-sarif@v2
-          with:
-            sarif_file: sarif_files
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: sarif_files
 
