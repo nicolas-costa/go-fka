@@ -39,17 +39,29 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Snyk CLI to perform SCA
-        # Default command is snyk test, which is SCA scan
         uses: snyk/actions/golang@master
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high
+          # command: test => defaults to test, which is SCA scan
+          args: --severity-threshold=high --sarif-file-output=snyk.sarif
 
       - name: Perform Snyk SAST
         uses: snyk/actions/golang@master
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          command: snyk code test --sarif > snyk-code.sarif # || true
+          command: code test
+          args: --sarif-file-output=snyk-code.sarif
+
+      - name: Create SARIF directory and move SARIF files
+        run: |
+          mkdir sarif_files && mv snyk.sarif snyk-code.sarif sarif_files/
+
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: sarif_files
 
