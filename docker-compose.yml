@@ -2,6 +2,9 @@ version: "3.8"
 
 services:
   producer:
+    depends_on:
+      - kafka
+      - zookeeper
     build:
       dockerfile: Dockerfile
       context: ./
@@ -12,6 +15,9 @@ services:
     volumes:
       - "./:/app"
   consumer:
+    depends_on:
+      - kafka
+      - zookeeper
     build:
       dockerfile: Dockerfile
       context: ./
